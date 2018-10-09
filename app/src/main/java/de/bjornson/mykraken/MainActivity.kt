@@ -3,30 +3,24 @@ package de.bjornson.mykraken
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import android.widget.Toast
+import de.bjornson.mykraken.model.data.TickerEntry
+import de.bjornson.mykraken.model.data.TickerLtcToEurResult
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : KrakenActivity() {
     private lateinit var ltcValueText: TextView
     private lateinit var refreshButton: Button
-    private lateinit var krakenService: KrakenService
+    private var disposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initRetrofit()
         initViews()
-    }
-
-    private fun initRetrofit() {
-        val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.kraken.com/0/public/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-
-        this.krakenService = retrofit.create<KrakenService>(KrakenService::class.java)
+        refresh()
     }
 
 
@@ -38,6 +32,28 @@ class MainActivity : AppCompatActivity() {
 
     private fun refresh() {
         this.refreshButton.isEnabled = false
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        this.disposable = this.getKrakenService().getLtcToEur().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { result: TickerLtcToEurResult -> showResult(result.result.liteCoinToEur) },
+                        { error -> showError(error) }
+                )
+    }
+
+    private fun showError(error: Throwable) {
+        Toast.makeText(applicationContext, "Error: " + error.message, Toast.LENGTH_LONG).show()
+        this.refreshButton.isEnabled = true
+    }
+
+    private fun showResult(liteCoinToEur: TickerEntry) {
+        val value = liteCoinToEur.bid[0].toFloat()
+        val formattedValue = CurrencyFormatter.format(value, "EUR")
+        this.ltcValueText.text = formattedValue
+        this.refreshButton.isEnabled = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        disposable?.dispose()
     }
 }

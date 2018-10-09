@@ -1,7 +1,7 @@
 package de.bjornson.mykraken
 
 import de.bjornson.mykraken.model.data.TickerLtcToEurResult
-import retrofit2.Call
+import io.reactivex.Observable
 import retrofit2.http.GET
 
 /**
@@ -10,5 +10,5 @@ import retrofit2.http.GET
  */
 interface KrakenService {
     @GET("Ticker?pair=LTCEUR")
-    fun getLtcToEur(): Call<TickerLtcToEurResult>
+    fun getLtcToEur(): Observable<TickerLtcToEurResult>
 }
