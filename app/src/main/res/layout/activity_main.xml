@@ -17,6 +17,7 @@
         tools:text="1 LTC = 75,21€" />
 
     <Button
+        android:id="@+id/main_refresh_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_refresh"
