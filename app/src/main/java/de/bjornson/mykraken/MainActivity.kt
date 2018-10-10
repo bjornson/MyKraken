@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.google.gson.internal.LinkedTreeMap
 import de.bjornson.mykraken.model.data.TickerEntry
-import de.bjornson.mykraken.model.data.TickerLtcToEurResult
+import de.bjornson.mykraken.model.data.TickerResult
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-
 
 class MainActivity : KrakenActivity() {
     private lateinit var ltcValueText: TextView
@@ -23,7 +23,6 @@ class MainActivity : KrakenActivity() {
         refresh()
     }
 
-
     private fun initViews() {
         this.ltcValueText = findViewById(R.id.main_ltc_value)
         this.refreshButton = findViewById(R.id.main_refresh_button)
@@ -32,10 +31,10 @@ class MainActivity : KrakenActivity() {
 
     private fun refresh() {
         this.refreshButton.isEnabled = false
-        this.disposable = this.getKrakenService().getLtcToEur().subscribeOn(Schedulers.io())
+        this.disposable = this.krakenApi().service.getTicker("LTCEUR").subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { result: TickerLtcToEurResult -> showResult(result.result.liteCoinToEur) },
+                        { result: TickerResult -> showResult(result.resultMap) },
                         { error -> showError(error) }
                 )
     }
@@ -45,8 +44,9 @@ class MainActivity : KrakenActivity() {
         this.refreshButton.isEnabled = true
     }
 
-    private fun showResult(liteCoinToEur: TickerEntry) {
-        val value = liteCoinToEur.bid[0].toFloat()
+    private fun showResult(resultMap: LinkedTreeMap<String, TickerEntry>) {
+        resultMap.get(resultMap.keys.first())
+        val value = resultMap[resultMap.keys.first()]?.bid?.get(0)?.toFloat()
         val formattedValue = CurrencyFormatter.format(value, "EUR")
         this.ltcValueText.text = formattedValue
         this.refreshButton.isEnabled = true

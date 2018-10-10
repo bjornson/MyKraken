@@ -9,7 +9,7 @@ import java.util.*
  */
 class CurrencyFormatter {
     companion object {
-        fun format(value: Float, currencyCode: String): String {
+        fun format(value: Float?, currencyCode: String): String {
             val numberFormat: NumberFormat = NumberFormat.getCurrencyInstance();
             numberFormat.maximumFractionDigits = 2
             val currency: Currency = Currency.getInstance(currencyCode)
