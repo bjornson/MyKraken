@@ -6,15 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/main_ltc_value"
+    <Spinner
+        android:id="@+id/main_coin_selector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="1 LTC = 75,21€" />
+        tools:text="Selector" />
 
     <Button
         android:id="@+id/main_refresh_button"
@@ -23,6 +22,24 @@
         android:text="@string/button_refresh"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_ltc_value" />
+        app:layout_constraintTop_toBottomOf="@+id/main_coin_selector" />
+
+    <TextView
+        android:id="@+id/main_coin_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_refresh_button"
+        tools:text="75,21" />
+
+    <TextView
+        android:id="@+id/main_coin_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_coin_value"
+        tools:text="LTC in EUR" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
