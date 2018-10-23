@@ -15,6 +15,7 @@ All calls use RX and return typed objects in Observables.
 
 For example to get the current ticker for Litecoin in €:
 
+```
 val krakenApi:KrakenApi = KrakenApi()
 krakenApi().service.getTicker("LTCEUR").subscribeOn(Schedulers.io())
     .observeOn(AndroidSchedulers.mainThread())
@@ -22,3 +23,28 @@ krakenApi().service.getTicker("LTCEUR").subscribeOn(Schedulers.io())
         { result: TickerResult -> showResult(result) },
         { error -> showError(error) }
     )
+```
+
+You can pull the whole repository or let gradle do it for you with the following steps:
+
+Include jitpack in your project repositories, in your root gradle add:
+```
+allprojects {
+  repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+  }
+}
+```
+
+Implement the library in your app module, add in your app gradle:
+```
+dependencies {
+  // MyKraken
+  implementation 'com.github.bjornson:MyKraken:0.1.0'
+  // RX android
+  implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
+  // GSON
+  implementation 'com.google.code.gson:gson:2.8.5'
+}
+```
