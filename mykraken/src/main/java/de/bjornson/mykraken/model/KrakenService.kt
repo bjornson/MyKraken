@@ -9,6 +9,7 @@ import retrofit2.http.Query
  * Description
  * Created by Björn Kechel (bkechel@gmail.com) on 09.10.2018.
  */
+@Suppress("unused")
 interface KrakenService {
     /**
      * Requests ticker data for trading pairs.
@@ -20,6 +21,13 @@ interface KrakenService {
     @GET("OHLC")
     fun getOHLC(@Query("pair") pair: String, @Query("interval") interval: Int, @Query("since") sinceId: Int = 0): Observable<OHLCResult>
 
+    /**
+     * Requests recent spread data.
+     * @param pair Asset pairs to get info on. E.g. "LTCEUR,LTCUSD".
+     * @param sinceId Spread data since given id. Returns latest by default. Note: "since" is
+     * inclusive so any returned data with the same time as the previous set should overwrite all
+     * of the previous set's entries at that time.
+     */
     @GET("Spread")
     fun getSpread(@Query("pair") pair: String, @Query("since") sinceId: Int = 0): Observable<SpreadResult>
 
@@ -30,7 +38,7 @@ interface KrakenService {
     fun getAssets(): Observable<AssetsResult>
 
     /**
-     * Requests all tradable assets.
+     * Requests all tradable asset pairs.
      */
     @GET("AssetPairs")
     fun getTradableAssetPairs(): Observable<AssetPairsResult>
