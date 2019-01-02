@@ -26,9 +26,9 @@ data class AssetPairEntry(
         @SerializedName("leverage_sell")
         val leverageSell: List<Any>,
         @SerializedName("fees")
-        val fees: List<List<Int>>,
+        val fees: List<List<Float>>,
         @SerializedName("fees_maker")
-        val feesMaker: List<List<Int>>,
+        val feesMaker: List<List<Float>>,
         @SerializedName("fee_volume_currency")
         val feeVolumeCurrency: String,
         @SerializedName("margin_call")
